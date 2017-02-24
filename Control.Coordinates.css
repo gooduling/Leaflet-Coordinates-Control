@@ -1,3 +1,6 @@
+#map {
+	border: 2px solid grey;
+}
 .leaflet-control-coordinates {
 	background: white;
 	border-radius: 4px;
@@ -13,7 +16,7 @@
 .leaflet-control-coordinates-lng {
 	padding-left: 5px;
 }
-.copy-button {
+button {
     background: none;
     border: 0;
     color: inherit;
@@ -31,13 +34,14 @@
         -ms-user-select: none;
 }
 
-.copy-button ::-moz-focus-inner {
+button ::-moz-focus-inner {
     border: 0;
     padding: 0;
 }
 
 .copy-button.active{
-	background-color: #e6636e;
+	background-color: #5993f5;
+	color: #fff;
 }
 .copy-button, .coord-input {
     background-color: #f0f0f0;
@@ -53,5 +57,13 @@
 .coord-input:focus {
 	outline: 0;
 } 
-
+.cityBtn {
+    background-color: #5993f5;
+	color: #fff;
+       border: 1px solid rgb(0, 0, 0);
+       border: 1px solid rgba(0, 0, 0, 0.1);
+       border-radius: 0.25em;
+       margin: 2px;
+       padding: 1px 2px;
+}
 

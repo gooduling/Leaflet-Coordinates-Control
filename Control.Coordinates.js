@@ -13,8 +13,16 @@
 L.Control.Coordinates = L.Control.extend({
 	options: {
 		position: 'topright',
-		precision: 4
-	},
+		precision: 4,
+		cityCoord: {
+			kharkiv:[[49.984353, 36.232946], 'Харків'],
+			lviv: [[49.843075, 24.029400], 'Львів'],
+			odesa: [[46.471713, 30.704227], 'Одеса'],			
+			dnipro: [[48.470131, 35.017922], 'Дніпро'],
+			kyiv: [[50.442508, 30.522791], 'Київ'],
+		},
+		},
+		
 
 	initialize: function(options)
 	{
@@ -25,24 +33,42 @@ L.Control.Coordinates = L.Control.extend({
 	{
 		var className = 'leaflet-control-coordinates',
 			that = this,
-			container = this._container = L.DomUtil.create('div', className);
-		this.visible = false;
+			wrapContainer = L.DomUtil.create('div', 'contol-wrapper'),
+			cityContainer = L.DomUtil.create('div', 'city-container', wrapContainer),
+			container = L.DomUtil.create('div', className, wrapContainer);
+			this._conwtainer = container;
+			
+		//this.visible = false;
+	//	L.DomUtil.addClass(container, 'hidden');
+		L.DomEvent.disableClickPropagation(wrapContainer);
 
-			L.DomUtil.addClass(container, 'hidden');
+		this._addText(container, cityContainer, map);
 
-
-		L.DomEvent.disableClickPropagation(container);
-
-		this._addText(container, map);
-
-		return container;
+		return wrapContainer;
 	},
 
-	_addText: function(container, context)
-	{
+	_addText: function(container, cityContainer, context) {
+		var self = this;
+		function makeCityBtn(btn, label, coord) {
+			
+			L.DomUtil.get(btn).innerHTML = label;
+			L.DomUtil.get(btn).addEventListener('click', function(event) { 
+			context.flyTo(coord, 11)
+			})
+			
+		}
+		console.log(this.options.cityCoord)
+		Object.keys(this.options.cityCoord).forEach(function(key, i) {
+			var btn = self['_btn' + key];
+			btn = L.DomUtil.create('button', key + ' cityBtn' , cityContainer);
+			makeCityBtn(btn, self.options.cityCoord[key][1], self.options.cityCoord[key][0])
+		})
 		this._copyBtn = L.DomUtil.create('button', 'copy-button' , container);
 		this._input = L.DomUtil.create('input', 'coord-input' , container);
-		var self = this;
+		
+		
+		
+		
 		L.DomUtil.get(this._copyBtn).innerHTML = 'Copy';
 		L.DomUtil.get(this._copyBtn).addEventListener('click', function(event) {
 			var copyTextarea = document.querySelector('.coord-input');
@@ -68,9 +94,11 @@ L.Control.Coordinates = L.Control.extend({
 	 * @param event object
 	 */
 	setCoordinates: function(obj) {
-		if (!this.visible) {
-			L.DomUtil.removeClass(this._container, 'hidden');
-		}
+		// if (!this.visible) {
+// 			console.log(this._conwtainer);
+// 			L.DomUtil.removeClass(this._conwtainer, 'hidden');
+// 			this.visible = true;
+// 		}
 
 		if (obj.latlng) {
 			L.DomUtil.get(this._input).value = obj.latlng.lat.toFixed(this.options.precision).toString() + '|' + obj.latlng.lng.toFixed(this.options.precision).toString();
