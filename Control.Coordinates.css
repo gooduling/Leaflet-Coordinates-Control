@@ -9,7 +9,7 @@
 }
 #googleform {
 	margin: 0 30px;
-	width: calc(100%-60px);
+	width: 100%;
 	max-width: 700px;
 }
 .leaflet-control-coordinates {
