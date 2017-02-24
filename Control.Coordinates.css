@@ -1,5 +1,16 @@
 #map {
 	border: 2px solid grey;
+	margin: 0 30px;
+	width: calc(100%-60px);
+	max-width: 700px;
+	height: 90vh;
+	max-height: 500px;
+	
+}
+#googleform {
+	margin: 0 30px;
+	width: calc(100%-60px);
+	max-width: 700px;
 }
 .leaflet-control-coordinates {
 	background: white;
