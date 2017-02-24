@@ -13,3 +13,45 @@
 .leaflet-control-coordinates-lng {
 	padding-left: 5px;
 }
+.copy-button {
+    background: none;
+    border: 0;
+    color: inherit;
+    /* cursor: default; */
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    -webkit-box-sizing: content-box;
+       -moz-box-sizing: content-box;
+            box-sizing: content-box;
+    -webkit-appearance: button; /* for input */
+    -webkit-user-select: none; /* for button */
+       -moz-user-select: none;
+        -ms-user-select: none;
+}
+
+.copy-button ::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.copy-button.active{
+	background-color: #e6636e;
+}
+.copy-button, .coord-input {
+    background-color: #f0f0f0;
+       border: 1px solid rgb(0, 0, 0);
+       border: 1px solid rgba(0, 0, 0, 0.1);
+       border-radius: 0.25em;
+       height: 2.5em;
+       line-height: 2.5;
+       margin: 0.25em;
+       padding: 0 1em;
+}
+
+.coord-input:focus {
+	outline: 0;
+} 
+
+

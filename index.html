@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Leaflet Coordinates Control</title>
+	<title>Leaflet Picker</title>
 	<meta charset="utf-8" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +9,34 @@
 <link rel="stylesheet" href="Control.Coordinates.css" />
 </head>
 <body>
-	<div id="map" style="width: 600px; height: 400px"></div>
-
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe5hhaRR_Nb_Nz6_PmglYwA_hna2CTeTxq9ZuNGmxBFsT0_EA/viewform?embedded=true" width="700" height="1850" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+<h3 style="width: 700px">Отримати координати:</h3>
+	<div id="map" style="width: 700px; height: 500px"></div>
+	
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 	<script src="Control.Coordinates.js"></script>
 	<script>
 
-		var map = L.map('map').setView([51.505, -0.09], 13);
-
-		L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+		var map = L.map('map').setView([50.44, 30.52], 11); 
+<!-- http://a.tile.openstreetmap.fr/hot/ -->
+		L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
 			maxZoom: 18,
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 		}).addTo(map);
+	//	L.circle([50.44, 30.52, 35,99], {radius: 200}).addTo(map);
 
 		var c = new L.Control.Coordinates();
 		c.addTo(map);
 
-		function onMapClick(e) {
+		function onMapClick(e) {	
 			c.setCoordinates(e);
+		}
+		function onMapHover(e) {
+			c.bindCircle(e);
 		}
 
 		map.on('click', onMapClick);
+		map.on('mousemove', onMapHover);
 
 	</script>
 </body>

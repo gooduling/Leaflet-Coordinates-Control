@@ -12,10 +12,7 @@
  */
 L.Control.Coordinates = L.Control.extend({
 	options: {
-		position: 'bottomleft',
-		latitudeText: 'lat.',
-		longitudeText: 'lon.',
-		promptText: 'Press Ctrl+C to copy coordinates',
+		position: 'topright',
 		precision: 4
 	},
 
@@ -38,26 +35,30 @@ L.Control.Coordinates = L.Control.extend({
 
 		this._addText(container, map);
 
-		L.DomEvent.addListener(container, 'click', function() {
-			var lat = L.DomUtil.get(that._lat),
-				lng = L.DomUtil.get(that._lng),
-				latTextLen = this.options.latitudeText.length + 1,
-				lngTextLen = this.options.longitudeText.length + 1,
-				latTextIndex = lat.textContent.indexOf(this.options.latitudeText) + latTextLen,
-				lngTextIndex = lng.textContent.indexOf(this.options.longitudeText) + lngTextLen,
-				latCoordinate = lat.textContent.substr(latTextIndex),
-				lngCoordinate = lng.textContent.substr(lngTextIndex);
-
-			window.prompt(this.options.promptText, latCoordinate + ' ' + lngCoordinate);
-    	}, this);
-
 		return container;
 	},
 
 	_addText: function(container, context)
 	{
-		this._lat = L.DomUtil.create('span', 'leaflet-control-coordinates-lat' , container),
-		this._lng = L.DomUtil.create('span', 'leaflet-control-coordinates-lng' , container);
+		this._copyBtn = L.DomUtil.create('button', 'copy-button' , container);
+		this._input = L.DomUtil.create('input', 'coord-input' , container);
+		var self = this;
+		L.DomUtil.get(this._copyBtn).innerHTML = 'Copy';
+		L.DomUtil.get(this._copyBtn).addEventListener('click', function(event) {
+			var copyTextarea = document.querySelector('.coord-input');
+			  copyTextarea.select();
+
+			  try {
+			    var successful = document.execCommand('copy');
+			    var msg = successful ? 'successful' : 'unsuccessful';
+			    console.log('Copying text command was ' + msg);
+				L.DomUtil.removeClass(this, 'active');
+				copyTextarea.blur();
+				self.marker.setLatLng([-50, -30])
+			  } catch (err) {
+			    console.log('Oops, unable to copy');
+			  }
+		});
 
 		return container;
 	},
@@ -66,15 +67,41 @@ L.Control.Coordinates = L.Control.extend({
 	 * This method should be called when user clicks the map.
 	 * @param event object
 	 */
-	setCoordinates: function(obj)
-	{
+	setCoordinates: function(obj) {
 		if (!this.visible) {
 			L.DomUtil.removeClass(this._container, 'hidden');
 		}
 
 		if (obj.latlng) {
-			L.DomUtil.get(this._lat).innerHTML = '<strong>' + this.options.latitudeText + ':</strong> ' + obj.latlng.lat.toFixed(this.options.precision).toString();
-			L.DomUtil.get(this._lng).innerHTML = '<strong>' + this.options.longitudeText + ':</strong> ' + obj.latlng.lng.toFixed(this.options.precision).toString();
+			L.DomUtil.get(this._input).value = obj.latlng.lat.toFixed(this.options.precision).toString() + '|' + obj.latlng.lng.toFixed(this.options.precision).toString();
+			L.DomUtil.addClass(this._copyBtn, 'active');
+			//L.circle([obj.latlng.lat, 30.455], {radius: 1000}).addTo(map); 
+			
+			if (!this.marker) { 
+				this.marker = L.marker([obj.latlng.lat, obj.latlng.lng]).addTo(map); 
+			}
+			else { 
+				this.marker.setLatLng([obj.latlng.lat, obj.latlng.lng])
+			}			
+			
+		}
+		
+	},
+	/**
+	 * This method should be called when user move cursor over the map.
+	 * It draws circle ander cursor
+	 * @param event object
+	 */
+	bindCircle: function(obj) {
+		if (obj.latlng) {
+			
+			if (!this.cursorProjection) { 
+				//console.log(obj.latlng.lat, obj.latlng.lng);
+				//this.cursorProjection = L.circle([obj.latlng.lat, 30.4], {radius: 1000}).addTo(map); 
+			}
+			else { 
+				//this.cursorProjection.setLatLng([obj.latlng.lat, obj.latlng.lng])
+			}	
 		}
 	}
 });
