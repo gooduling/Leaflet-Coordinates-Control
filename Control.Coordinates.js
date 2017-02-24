@@ -57,7 +57,7 @@ L.Control.Coordinates = L.Control.extend({
 			})
 			
 		}
-		console.log(this.options.cityCoord)
+	
 		Object.keys(this.options.cityCoord).forEach(function(key, i) {
 			var btn = self['_btn' + key];
 			btn = L.DomUtil.create('button', key + ' cityBtn' , cityContainer);
