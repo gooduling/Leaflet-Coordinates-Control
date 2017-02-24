@@ -75,8 +75,7 @@ L.Control.Coordinates = L.Control.extend({
 		if (obj.latlng) {
 			L.DomUtil.get(this._input).value = obj.latlng.lat.toFixed(this.options.precision).toString() + '|' + obj.latlng.lng.toFixed(this.options.precision).toString();
 			L.DomUtil.addClass(this._copyBtn, 'active');
-			//L.circle([obj.latlng.lat, 30.455], {radius: 1000}).addTo(map); 
-			
+		
 			if (!this.marker) { 
 				this.marker = L.marker([obj.latlng.lat, obj.latlng.lng]).addTo(map); 
 			}
@@ -96,11 +95,10 @@ L.Control.Coordinates = L.Control.extend({
 		if (obj.latlng) {
 			
 			if (!this.cursorProjection) { 
-				//console.log(obj.latlng.lat, obj.latlng.lng);
-				//this.cursorProjection = L.circle([obj.latlng.lat, 30.4], {radius: 1000}).addTo(map); 
+				this.cursorProjection = L.circle([obj.latlng.lat, obj.latlng.lng], {radius: 1000, weight: 0}).addTo(map); 
 			}
 			else { 
-				//this.cursorProjection.setLatLng([obj.latlng.lat, obj.latlng.lng])
+				this.cursorProjection.setLatLng([obj.latlng.lat, obj.latlng.lng])
 			}	
 		}
 	}
