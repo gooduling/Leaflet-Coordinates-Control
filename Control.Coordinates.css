@@ -77,4 +77,16 @@ button ::-moz-focus-inner {
        margin: 2px;
        padding: 1px 2px;
 }
-
+.comp-label {
+	background-color: #d86f6f;
+	border-radius: 50%;
+}
+.leaflet-tooltip-pane div{
+	background: none;
+	border: none;
+	box-shadow: none;
+	color: #855;
+}
+.leaflet-tooltip-pane div:after, .leaflet-tooltip-pane div:before {
+	display: none;
+}

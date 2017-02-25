@@ -17,15 +17,34 @@
 	
 	<script src="Control.Coordinates.js"></script>
 	<script>
-
+	var companies = {
+		Ciklum: [50.422338, 30.505977],
+		Epam: [50.431323, 30.487461],
+		Luxsoft: [50.450266, 30.410349],
+		DataArt: [50.459355, 30.496512],
+		SoftServe: [50.462448, 30.449534],
+		Infopulse: [50.444715, 30.450561],
+		GlobalLogic: [50.424638, 30.506538],
+		NIX_Solutions:[50.008210, 36.239346],
+		Netcracker: [50.420402, 30.528942],
+		Miratech: [50.447575, 30.422399],
+		Innovecs: [50.446572, 30.423697],
+		EVO: [50.404759, 30.680041]
+	};
 		var map = L.map('map').setView([50.44, 30.52], 11); 
 <!-- http://a.tile.openstreetmap.fr/hot/ -->
 		L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
 			maxZoom: 18,
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 		}).addTo(map);
-	//	L.circle([50.44, 30.52, 35,99], {radius: 200}).addTo(map);
 
+
+Object.keys(companies).forEach(function(key, i) {
+	var coord = companies[key];
+	var icon = L.divIcon({className: 'comp-label'});
+	var mark = L.marker(coord, {icon: icon}).addTo(map);
+	mark.bindTooltip(key, {permanent: true});
+})
 		var c = new L.Control.Coordinates();
 		c.addTo(map);
 
