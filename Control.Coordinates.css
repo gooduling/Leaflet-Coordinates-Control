@@ -1,4 +1,4 @@
-#map {
+#map.in-group {
 	border: 2px solid grey;
 	margin: 0 30px;
 	width: 100%;
@@ -6,6 +6,12 @@
 	height: 90vh;
 	max-height: 500px;
 	
+}
+.single-map #map {
+	height: 100vh;	
+}
+.single-map {
+	margin: 0;
 }
 #googleform {
 	margin: 0 30px;
