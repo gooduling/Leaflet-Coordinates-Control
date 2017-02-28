@@ -27,7 +27,13 @@
 		Innovecs: [50.446572, 30.423697],
 		EVO: [50.404759, 30.680041]
 	};
-		var map = L.map('map').setView([50.44, 30.52], 11); 
+	var map = L.map('map', {
+		center: [50.44, 30.52],
+		scrollWheelZoom: false,
+		zoom: 11
+	});
+	map.on('focus', function() { map.scrollWheelZoom.enable(); });
+	map.on('blur', function() { map.scrollWheelZoom.disable(); });
 <!-- http://a.tile.openstreetmap.fr/hot/ -->
 		L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
 			maxZoom: 18,
