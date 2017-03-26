@@ -8,15 +8,30 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 <link rel="stylesheet" href="Control.Coordinates.css" />
  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
 </head>
 <body>
-<iframe id="googleform" src="https://docs.google.com/forms/d/e/1FAIpQLSe5hhaRR_Nb_Nz6_PmglYwA_hna2CTeTxq9ZuNGmxBFsT0_EA/viewform?embedded=true" height="1850" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+<iframe id="googleform" src="https://docs.google.com/forms/d/e/1FAIpQLSe5hhaRR_Nb_Nz6_PmglYwA_hna2CTeTxq9ZuNGmxBFsT0_EA/viewform?embedded=true" height="450" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 <h3 style="width: 700px">Отримати координати:</h3>
 	<div id="map" class="in-group"></div>
-	
+	<iframe id="googleform" src="https://docs.google.com/forms/d/e/1FAIpQLSe5hhaRR_Nb_Nz6_PmglYwA_hna2CTeTxq9ZuNGmxBFsT0_EA/viewform?embedded=true" height="450" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 	
 	<script src="Control.Coordinates.js"></script>
 	<script>
+	var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1I9-8tqq5CsLOTycXU4Y84CQw47fDsUEIPMxRNt7Te9U/pubhtml';
+
+	  function init() {
+	    Tabletop.init( { key: publicSpreadsheetUrl,
+	                     callback: showInfo,
+	                     simpleSheet: true } )
+	  }
+
+	  function showInfo(data, tabletop) {
+	    alert('Successfully processed!')
+	    console.log(data);
+	  }
+
+	  window.addEventListener('DOMContentLoaded', init);
 	var companies = {
 		Ciklum: [50.422338, 30.505977],
 		Ciklum2: [50.438579, 30.523105],

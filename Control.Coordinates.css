@@ -2,9 +2,9 @@
 	border: 2px solid grey;
 	margin: 0 30px;
 	width: 100%;
-	max-width: 700px;
+	max-width: 950px;
 	height: 90vh;
-	max-height: 500px;
+	max-height: 700px;
 	
 }
 .single-map #map {
@@ -83,15 +83,15 @@ button ::-moz-focus-inner {
        margin: 2px;
        padding: 1px 2px;
 }
-.comp-label {
-	background-color: #d86f6f;
-	border-radius: 50%;
-}
-.leaflet-tooltip-pane div{
+.comp-label-tooltip{
 	background: none;
 	border: none;
 	box-shadow: none;
 	color: #855;
+	font-weight: bold;
+}
+.home-tooltip{
+
 }
 .leaflet-tooltip-pane div:after, .leaflet-tooltip-pane div:before {
 	display: none;

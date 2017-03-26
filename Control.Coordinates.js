@@ -34,12 +34,10 @@ L.Control.Coordinates = L.Control.extend({
 		var className = 'leaflet-control-coordinates',
 			that = this,
 			wrapContainer = L.DomUtil.create('div', 'contol-wrapper'),
-			cityContainer = L.DomUtil.create('div', 'city-container', wrapContainer),
+			cityContainer = L.DomUtil.create('div', 'cityBondaries-container', wrapContainer),
 			container = L.DomUtil.create('div', className, wrapContainer);
 			this._conwtainer = container;
-			
-		//this.visible = false;
-	//	L.DomUtil.addClass(container, 'hidden');
+
 		L.DomEvent.disableClickPropagation(wrapContainer);
 
 		this._addText(container, cityContainer, map);
@@ -49,25 +47,14 @@ L.Control.Coordinates = L.Control.extend({
 
 	_addText: function(container, cityContainer, context) {
 		var self = this;
-		function makeCityBtn(btn, label, coord) {
-			
-			L.DomUtil.get(btn).innerHTML = label;
-			L.DomUtil.get(btn).addEventListener('click', function(event) { 
-			context.flyTo(coord, 11)
-			})
-			
-		}
-	
-		Object.keys(this.options.cityCoord).forEach(function(key, i) {
+		for (var key in this.options.cityCoord) {
 			var btn = self['_btn' + key];
 			btn = L.DomUtil.create('button', key + ' cityBtn' , cityContainer);
 			makeCityBtn(btn, self.options.cityCoord[key][1], self.options.cityCoord[key][0])
-		})
+		};
+
 		this._copyBtn = L.DomUtil.create('button', 'copy-button' , container);
 		this._input = L.DomUtil.create('input', 'coord-input' , container);
-		
-		
-		
 		
 		L.DomUtil.get(this._copyBtn).innerHTML = 'Copy';
 		L.DomUtil.get(this._copyBtn).addEventListener('click', function(event) {
@@ -87,6 +74,14 @@ L.Control.Coordinates = L.Control.extend({
 		});
 
 		return container;
+
+		function makeCityBtn(btn, label, coord) {
+			L.DomUtil.get(btn).innerHTML = label;
+			L.DomUtil.get(btn).addEventListener('click', function(event) {
+				context.flyTo(coord, 11)
+			})
+
+		}
 	},
 
 	/**
@@ -101,7 +96,7 @@ L.Control.Coordinates = L.Control.extend({
 // 		}
 
 		if (obj.latlng) {
-			L.DomUtil.get(this._input).value = obj.latlng.lat.toFixed(this.options.precision).toString() + '|' + obj.latlng.lng.toFixed(this.options.precision).toString();
+			L.DomUtil.get(this._input).value = obj.latlng.lat.toFixed(this.options.precision).toString() + ', ' + obj.latlng.lng.toFixed(this.options.precision).toString();
 			L.DomUtil.addClass(this._copyBtn, 'active');
 		
 			if (!this.marker) { 

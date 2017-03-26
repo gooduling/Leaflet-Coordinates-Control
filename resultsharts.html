@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+    var grades = {
+        'Так':2,
+        'Скоріше так': 1,
+        'Скоріше ні': -1,
+        'Ні': -2,
+        'Важко відповісти': 0
+    };
+    var svg = dimple.newSvg("body", 800, 600);
+    d3.csv('./georesults.csv', row, function(error, data) {
+var agesCount = {};
+        data = data.filter(d=>(d.age<45 && d.liveHouse));
+        data.forEach(item => agesCount[item.age] = (agesCount[item.age] || 0) +1 );
+data = data.map(item => {item.value = 1/agesCount[item.age]; return item});
+        console.log(agesCount);
 
+       // data = [data[0], data[5], data[10], data[200]];
+        console.log(data);
+        var myChart = new dimple.chart(svg, data);
+        myChart.setBounds(60, 30, 500, 330);
+        var xAxis = myChart.addCategoryAxis("x", 'age');
+        xAxis.title = 'Вік';
+        xAxis.showGridlines = true;
+        var yAxis = myChart.addCategoryAxis("y", "liveHouse");
+yAxis.title = "Чи хотіли б ви жити у власному будинку?";
+        myChart.addMeasureAxis("z", 'value');
+        myChart.addSeries("liveSuburb", dimple.plot.bubble);
+        myChart.addLegend(200, 10, 360, 20, "right");
+        myChart.draw();
+    });
+
+    function row(d) {
+        d.liveHouse = grades[d.liveHouse];
+        //d.liveSuburb = evaluationGradesMapper[d.liveHouse];
+        d.age = +d.age;
+        d.quantity= 1;
+//console.log(d.liveHouse, evaluationGradesMapper[d.liveHouse], evaluationGradesMapper);
+        return d;
+    }
+</script>
 </body>
 </html>

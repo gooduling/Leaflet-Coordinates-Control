@@ -18,7 +18,19 @@ var emptyPerson = {
     total: "",
     region: ""
 };
-
+var grades = {
+    'Так':2,
+    'Скоріше так': 1,
+    'Скоріше ні': -1,
+    'Ні': -2,
+    'Важко відповісти': 0
+};
+var townGrades = {
+    'Найкраще'	: 2,
+    'Нормальне	': 1,
+    'Погане	': -1,
+    'Важко відповісти': 0
+};
 //collectByField("position", ["судя", "суду", "судя"],  "suddi-auto.csv");
 collectByField("georesults.csv", "testconverted.csv");
 
@@ -29,18 +41,33 @@ function collectByField (sourceFile, distanceFile) {
         .pipe(csv.format({headers: true}))
         //Using the transfrom function from the formatting stream
         .transform(function (row, next) {
-            console.log(row);
-            var person = {
-                age: +row.age,
-                // id: row.uuid,
-                // office: row.office,
-                // position: row.position,
-                // professionGroup: defineProfessionGroup(row),
-                // uah: summCur(row, "UAH"),
-                // usd: summCur(row, "USD"),
-                // gbp: summCur(row, "GBP"),
-                // eur: summCur(row, "EUR")
-            };
+            var person = row;
+
+                // timestamp: ,
+                // geohome: ,
+                // geowork: ,
+                person.likeIrpin = townGrades[person.likeIrpin];
+            person.likeVishneve = townGrades[person.likeVishneve];
+            person.likeBucha = townGrades[person.likeBucha];
+            person.likeVorzel = townGrades[person.likeVorzel];
+            person.likeKocubinske = townGrades[person.likeKocubinske];
+            person.likeBoyarka = townGrades[person.likeBoyarka];
+            person.likeBrovary = townGrades[person.likeBrovary];
+            person.likeBoryspil = townGrades[person.likeBoryspil];
+            person.likeVyshgorod = townGrades[person.likeVyshgorod];
+              //  person.comments = ;
+                person.liveSuburb = grades[person.liveSuburb];
+                person.liveOkolica = grades[person.liveOkolica];
+                person.isGoodWorkLocation = grades[person.isGoodWorkLocation];
+                person.age = +person.age;
+                person.isRented = grades[person.isRented];
+                //person.job = ;
+                person.liveHouse = grades[person.liveHouse];
+                person.isInvestor = grades[person.isInvestor];
+                person.isActivist = grades[person.isActivist];
+                person.isFreeAppartmentImportant = grades[person.isFreeAppartmentImportant];
+               // person.feedBack:
+console.log(person);
             next(void 0, person);
            // person.total = Math.floor((person.uah || 0) / 26 + (person.usd || 0) + (person.gbp || 0) * 1.2 + (person.eur || 0) * 1.09);
            //  //if person is out of any professional collection and has less 400000 (for general chart) or just has less than 24000 (for all charts)
@@ -140,3 +167,30 @@ function findRegion(d) {
     }
     return ""
 }
+
+// {
+//     timestamp: ,
+//     geohome: ,
+//     geowork: ,
+//     likeIrpin: ,
+//     likeVishneve: ,
+//     likeBucha: ,
+//     likeVorzel: ,
+//     likeKocubinske: ,
+//     likeBoyarka: ,
+//     likeBrovary: ,
+//     likeBoryspil: ,
+//     likeVyshgorod: ,
+//     comments: ,
+//     liveSuburb: ,
+//     liveOkolica: ,
+//     isGoodWorkLocation: ,
+//     age: ,
+//     isRented: ,
+//     job: ,
+//     liveHouse: ,
+//     isInvestor: ,
+//     isActivist: ,
+//     isFreeAppartmentImportant: ,
+//     feedBack:
+//         };

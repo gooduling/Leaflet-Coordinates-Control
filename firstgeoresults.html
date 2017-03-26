@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Picker</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<link rel="stylesheet" href="Control.Coordinates.css" />
+<link rel="stylesheet" href="pollresults.css" />
+ <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+ <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>-->
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+	<div id="map" class="in-group"></div>
+	<div id="filterpanel">
+		<p>Відфільтрувати:</p>
+		<form name="filters">
+			<label>За розташуваням</label><br/>
+			<input type="radio" name="location" value='' checked>Всі разом<br/>
+			<input type="radio" name="location" value=0>Тільки місто<br/>
+			<input type="radio" name="location" value=1>Тільки передмістя<br/>
+			<br/>
+			<label>За професією</label>
+			<select name="job" id="filterByJob">
+				<option value="" selected>Всі спеціальності разом</option>
+			</select>
+		</form>
+		<hr/>
+		<p>Виділити за ознакою:</p>
+		<form name="highlights">
+			<select name="evaluation" id="evaluationSelector" onchange="switchSelectionByEvaluation('eval')">
+				<option value="" selected>Питання не обрано</option>
+			</select>
+			<br/>
+			<select name="jobhighlight" id="jobhighlightSelector" onchange="switchSelectionByEvaluation('job')">
+				<option value="" selected>Спеціальність не обрано</option>
+			</select>
+		</form>
+		<hr/>
+		Показати шляхи: <input type="checkbox" onclick="switchRoutes(this.checked)" checked/><br/>
+		Показати місця проживання: <input type="checkbox" onclick="switchHomePlaces(this.checked)" checked/><br/>
+		Показати місця роботи: <input type="checkbox" onclick="switchWorkingPlaces(this.checked)" checked/><br/>
+	</div>
+
+	<!--<script src="Control.Coordinates.js"></script>-->
+	<script src="citySwitchers.js"></script>
+	<script>
+		var zoom = 10;
+		var mapConfig = {
+			center: [50.44, 30.52],
+			scrollWheelZoom: true,//false,
+			zoom: zoom
+		};
+		var map = L.map('map', mapConfig);
+		var tiles = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png';
+		//var tiles = 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+		//var tiles = 'http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+		//var tiles = 'https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png';
+		//var tiles = 'http://a.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		L.tileLayer(tiles, {
+			maxZoom: 18,
+			attribution: '&copy; Andrii Ulianenko'
+		}).addTo(map);
+
+		var c = new L.Control.Coordinates();
+		c.addTo(map);
+	//	map.on('focus', function() { map.scrollWheelZoom.enable(); });
+	//	map.on('blur', function() { map.scrollWheelZoom.disable(); });
+		//map.on('click', function(e) {c.setCoordinates(e)});
+		//map.on('mousemove', function(e) {c.bindCircle(e);	});
+	</script>
+	<script src="georesponse.js"></script>
+</body>
+</html>

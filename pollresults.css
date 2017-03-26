@@ -1,95 +1,10 @@
-#map.in-group {
-	border: 2px solid grey;
-	margin: 0 30px;
-	width: 100%;
-	max-width: 950px;
-	height: 90vh;
-	max-height: 500px;
-	
-}
-.single-map #map {
-	height: 100vh;	
-}
-.single-map {
-	margin: 0;
-}
-#googleform {
-	margin: 0 30px;
-	width: 100%;
-	max-width: 700px;
-}
-.leaflet-control-coordinates {
-	background: white;
-	border-radius: 4px;
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-	cursor: pointer;
-	padding: 2px 5px;
-}
-
-.leaflet-control-coordinates.hidden {
-	display: none;
-}
-
-.leaflet-control-coordinates-lng {
-	padding-left: 5px;
-}
-button {
-    background: none;
-    border: 0;
-    color: inherit;
-    /* cursor: default; */
-    font: inherit;
-    line-height: normal;
-    overflow: visible;
-    padding: 0;
-    -webkit-box-sizing: content-box;
-       -moz-box-sizing: content-box;
-            box-sizing: content-box;
-    -webkit-appearance: button; /* for input */
-    -webkit-user-select: none; /* for button */
-       -moz-user-select: none;
-        -ms-user-select: none;
-}
-
-button ::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-.copy-button.active{
-	background-color: #5993f5;
-	color: #fff;
-}
-.copy-button, .coord-input {
-    background-color: #f0f0f0;
-       border: 1px solid rgb(0, 0, 0);
-       border: 1px solid rgba(0, 0, 0, 0.1);
-       border-radius: 0.25em;
-       height: 2.5em;
-       line-height: 2.5;
-       margin: 0.25em;
-       padding: 0 1em;
-}
-
-.coord-input:focus {
-	outline: 0;
-} 
-.cityBtn {
-    background-color: #5993f5;
-	color: #fff;
-       border: 1px solid rgb(0, 0, 0);
-       border: 1px solid rgba(0, 0, 0, 0.1);
-       border-radius: 0.25em;
-       margin: 2px;
-       padding: 1px 2px;
-}
 .comp-label {
-	background-color: #d86f6f;
-	border-radius: 50%;
-}
-.home-label {
-	background-color: #5993f5;
-	opacity: 0.7;
+	/*background-color: #d86f6f;*/
+	/*border-radius: 50%;*/
+	background-image: url(tower2.png);
+	background-size: contain;
+	heigth: 20px;
+	width: 20px;
 }
 .work-label {
 	background-color: #d86f6f;
@@ -97,13 +12,38 @@ button ::-moz-focus-inner {
 	width: 6px !important;
 	height: 6px !important;
 	border-radius: 50%;
+	margin: -3px 0 0 -3px !important;
 }
-.leaflet-tooltip-pane div{
-	background: none;
-	border: none;
-	box-shadow: none;
-	color: #855;
+.home-label {
+	background-color: #3993DD;// #FFA69E;//#5993f5;
+	opacity: 0.6;
 }
-.leaflet-tooltip-pane div:after, .leaflet-tooltip-pane div:before {
-	display: none;
+/*.liveHouse--1,
+var colorScale = ['#ff00c8','#c000ff', '#1b00ff', '#0043ff', '#0095ff'];
+*/
+.grade_2 {
+	background-color: #ff00ff;
+	opacity: 1;
+}
+.grade_1 {
+	background-color: #ff00ff;
+	opacity: 0.8;
+}
+/*.grade_0 {*/
+	/*background-color: #4b02ff;*/
+/*}*/
+.grade_-1 {
+	background-color: #5993f5;
+	opacity: 0.8;
+}
+.grade_-2 {
+	background-color: #5993f5;
+}
+#filterpanel{
+	width: 200px;
+	padding: 10px;
+	background: rgba(255,255,255,0.6);
+	position: absolute;
+	right: 0;
+	top: 30px;
 }
