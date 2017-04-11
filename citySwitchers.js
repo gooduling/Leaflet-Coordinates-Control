@@ -19,7 +19,7 @@ L.Control.Coordinates = L.Control.extend({
 	},
 
 	onAdd: function(map)	{
-		var wrapContainer = L.DomUtil.create('div', 'contol-wrapper');
+		var wrapContainer = L.DomUtil.create('div', 'control-wrapper');
 		var cityContainer = L.DomUtil.create('div', 'cityBondaries-container', wrapContainer);
 		L.DomEvent.disableClickPropagation(wrapContainer);
 		this._addText(cityContainer, map);
@@ -29,8 +29,8 @@ L.Control.Coordinates = L.Control.extend({
 	_addText: function(cityContainer, context) {
 		var self = this;
 		for (var key in this.options.cityCoord) {
-			var btn = self['_btn' + key];
-			btn = L.DomUtil.create('button', key + ' cityBtn' , cityContainer);
+			//var btn = self['_btn' + key];
+			var btn = L.DomUtil.create('button', key + ' cityBtn' , cityContainer);
 			makeCityBtn(btn, self.options.cityCoord[key][1], self.options.cityCoord[key][0])
 		};
 

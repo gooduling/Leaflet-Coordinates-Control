@@ -37,6 +37,13 @@ var evaluationGradesMapper = {
 	'Ні': -2,
 	'Важко відповісти': 0
 };
+var backEvaluationGradesMapper = {
+	'2': 'Так',
+	'1': 'Скоріше так',
+	'-1': 'Скоріше ні',
+	'-2': 'Ні',
+	'0': 'Важко відповісти'
+};
 var townGradesMapper = {
 	'Погане': -2,
 	'Нормальне':1,
@@ -45,10 +52,20 @@ var townGradesMapper = {
 };
 var evaluationColumns = ['liveSuburb', 'liveOkolica', 'isGoodWorkLocation',  'isRented',
 	'liveHouse', 'isInvestor', 'isActivist', 'isFreeAppartmentImportant'];
+const columnsMap = {
+	'liveSuburb': 'Готовий оселитися в комфортному передмісті',
+	'liveOkolica': 'Готовий працювати на околиці міста',
+	'isGoodWorkLocation':'Задоволений розташуванням поточної роботи',
+	'isRented':'Орендує житло',
+	'liveHouse': 'Хотів би жити у власному будинку',
+	'isInvestor': 'Схильний інвестувати в інфрастуктуру свого району',
+	'isActivist':'Схильний до громадської активності',
+	'isFreeAppartmentImportant': 'Цінує надання роботодавцем пільгового житла'
+};
 var townGradesColumns= ['likeIrpin', 'likeVishneve', 'likeBucha', 'likeVorzel', 'likeKocubinske',
 	'likeBoyarka', 'likeBrovary', 'likeBoryspil', 'likeVyshgorod' ];
 	// 'age','job','timestamp', 'geohome', 'geowork', 'comments'];
-var jobList = ['Software Developer','Project/Account Manager','BA/QA','Інша ІТ спеціальність','Спеціальність не пов\'язана з ІТ'];
+var jobList = ['Software Developer','Project/Account Manager','BA/QA','Інша ІТ спеціальність'];
 var regionBoundaries = {
 	kyiv:[[51.0068, 29.5313], [49.6321, 32.0691]],
 	lviv:[[50.0906, 23.4476], [49.4288, 24.6396]],
@@ -61,9 +78,7 @@ var cityBondaries = {
 	kyiv: [[50.5298, 30.3889], [50.3770, 30.6992]],
 	irpin: [[50.5799, 30.0785], [50.5036, 30.2852]],
 };
-var colorScale = ['#ff00c8','#c000ff', '#1b00ff', '#0043ff', '#0095ff'];
-var counter = 0;
-var mainData = filteredData = [], selection;
+var mainData = filteredData = [], selection, selectionField;
 var showRoutes = showWorkingPlaces = showHomePlaces= true;
 var homeMarkersLayer = L.layerGroup();
 var workMarkersLayer = L.layerGroup();
@@ -84,7 +99,7 @@ evaluationColumns.forEach(function(i) {
 	evaluationSelector
 		.append("option")
 		.attr("value", i)
-		.text(i)
+		.text(columnsMap[i])
 });
 jobList.forEach(i => {
 	jobHiglightSelector
@@ -114,15 +129,14 @@ map.on('zoomend', function (e) {
 });
 
 /**Get main data from tablesheet*/
-d3.csv('./finalPollResults.csv', row, function(error, data) {
-	mainData = data.filter(function(d){return !(d.distance && d.distance > 150)});
+d3.csv('./finalconverted.csv', row, function(error, data) {
+	mainData = data.filter(d=>!(d.distance && d.distance > 150 || d.job ==='Спеціальність не пов\'язана з ІТ'));
 	filteredData = mainData;
 	draw();
 });
 
 function draw(field) {
 	var data = filteredData;
-	if (selection) data = data.sort((b,a)=>(a[selection]-b[selection]));
 
 	data.forEach(function(d) {
 		/**Draw Routes */
@@ -179,34 +193,14 @@ function isInBorders(borders, coords) {
 }
 
 function row(d) {
-	evaluationColumns.forEach(function(item) {
-		d[item] = evaluationGradesMapper[d[item]] || -10;
-	});
-	townGradesColumns.forEach(function(item) {
-		d[item] = townGradesMapper[d[item]] || -10;
-	});
-	d.geohome = splitCoord(d.geohome);
-	d.geowork = splitCoord(d.geowork);
-	if(d.geohome) {
-		for (var region in regionBoundaries) {
-			if (isInBorders(regionBoundaries[region], d.geohome)) d.region = region;
-		}
-		for (var city in cityBondaries) {
-			if (isInBorders(cityBondaries[city], d.geohome)) d.city = city;
-		}
-		var isSuburb = ((d.region == 'kyiv' || d.region == 'lviv') && !(d.city && d.city != 'irpin'));
-		d.isSuburb = isSuburb;
-	};
+	if (d.geohome) d.geohome = d.geohome.split(',');
+	if (d.geowork) d.geowork = d.geowork.split(',');
 	if (d.geohome && d.geowork) {
 		d.distance = Math.round(L.latLng(d.geohome).distanceTo(d.geowork)/1000);
 	}
-	//d.liveHouse = evaluationGradesMapper[d.liveHouse];
-	//d.liveSuburb = evaluationGradesMapper[d.liveHouse];
-	d.age = +d.age;
-	//d.quantity= 1;
-//console.log(d.liveHouse, evaluationGradesMapper[d.liveHouse], evaluationGradesMapper);
 	return d;
 }
+
 function addCompaniesLabels(labelsList) {
 	for (var key in labelsList) {
 		var coord = labelsList[key];
@@ -217,39 +211,31 @@ function addCompaniesLabels(labelsList) {
 	};
 }
 function getHomeTooltipContent(d) {
-	return `<p>${d.job},</p> ${d.age}`
+	var evalRows = evaluationColumns.map(i=>backEvaluationGradesMapper[d[i]]?`<p>${columnsMap[i]}: <b>${backEvaluationGradesMapper[d[i]]}</b></p>`:'').join('');
+	return `<p><b>${d.age} р., ${d.job}, </b></p><hr/>` + evalRows;
 }
 function clearAll() {
 	homeMarkersLayer.clearLayers();
-	clearRoutes();
-	clearWorkMarkers();
-	homeMarkersLayer.clearLayers();
-}
-function clearRoutes() {
 	routesLayer.clearLayers();
-}
-function clearHomeMarkers() {
+	workMarkersLayer.clearLayers();
 	homeMarkersLayer.clearLayers();
 }
-function clearWorkMarkers() {
-	workMarkersLayer.clearLayers();
-}
-function switchSelectionByEvaluation(selector){
+function switchSelection(field){
+	selectionField = field;
 	var value;
-	if (selector === 'job') {
+	if (field === 'job') {
 		evalElem.value = '';
 		value = jobHighlightElem.value;
 	}
-	if (selector === 'eval') {
+	if (field === 'eval') {
 		jobHighlightElem.value = '';
 		value = evalElem.value;
 	}
-	clearAll();
 	selection = value;
-	draw(selector);
+	clearAll();
+	draw(field);
 }
 function switchFilter(){
-	evalElem.value='';
 	var locationValue = locationElem.value,
 		jobValue = jobElem.value;
 	filteredData= (!locationValue&& !jobValue) ? mainData: mainData.filter(function(d){
@@ -258,17 +244,13 @@ function switchFilter(){
 		return jobResult&& locationResult;
 	});
 	clearAll();
-	draw()
+	draw(selectionField);
 }
-// function switchSuburbFilter(value){
-// 	filteredData= !value ? filteredData: filteredData.filter(function(d){return d.job === value});
-// 	clearAll();
-// 	draw()
-// }
+
 function switchRoutes(value){
 	showRoutes = value;
 	if (!showRoutes) {
-		clearRoutes();
+		routesLayer.clearLayers();
 	} else {
 		clearAll();
 		draw();
@@ -277,7 +259,7 @@ function switchRoutes(value){
 function switchWorkingPlaces(value){
 	showWorkingPlaces = value;
 	if (!showWorkingPlaces) {
-		clearWorkMarkers();
+		workMarkersLayer.clearLayers();
 	} else {
 		clearAll();
 		draw();
@@ -291,4 +273,11 @@ function switchHomePlaces(value){
 		clearAll();
 		draw();
 	}
+}
+function clearFilters() {
+	filteredData = mainData;
+	selection = selectionField = undefined;
+	locationElem.value = jobElem.value = evalElem.value = '';
+	clearAll();
+	draw();
 }
