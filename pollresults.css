@@ -34,7 +34,7 @@ select {
 	border-radius: 20%;
 	display: inline-block;
 	margin: 0 5px;
-	margin: -4px 0 0 -4px !important;
+
 }
 .home-label {
 	background-color: #3993DD;// #FFA69E;//#5993f5;
@@ -42,6 +42,7 @@ select {
 	height: 9px !important;
 	border-radius: 20%;
 	opacity: 0.7;
+	margin: -4px 0 0 -4px !important;
 }
 .home-tooltip{
 	line-height: 0.5;

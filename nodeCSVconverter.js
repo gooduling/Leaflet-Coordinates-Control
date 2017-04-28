@@ -267,3 +267,4 @@ function rowTransformer(d) {
     //delete d.comments;
     return d;
 }
+//data.filter(d=>!(d.distance && d.distance > 150 || d.job ==='Спеціальність не пов\'язана з ІТ'));

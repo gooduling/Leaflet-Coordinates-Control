@@ -133,7 +133,7 @@ map.on('zoomend', function (e) {
 
 /**Get main data from tablesheet*/
 d3.csv('./finalconverted.csv', row, function(error, data) {
-	mainData = data.filter(d=>!(d.distance && d.distance > 150 || d.job ==='Спеціальність не пов\'язана з ІТ'));
+	mainData = data;
 	filteredData = mainData;
 	draw();
 });
@@ -153,8 +153,9 @@ function draw(field) {
 			var polyline = L.polyline([d.geohome, d.geowork], polylineOptions);
 			routesLayer.addLayer(polyline);
 		}
-		var grade = getGrade(d, field);
+		var grade = getGrade(d, field) || 0;
 		d.highlighted = grade > 0;
+		d.noEvalValue = Boolean(grade);
 		/**Draw Work Markers */
 		if (d.geowork && showWorkingPlaces) {
 			var iconWork = L.divIcon({className: `work-label workgrade_${grade}`});
