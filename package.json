@@ -18,6 +18,8 @@
   "homepage": "https://github.com/gooduling/e-declarations#readme",
   "dependencies": {
     "fast-csv": "^2.3.0",
+    "geolib": "^2.0.22",
+    "leaflet": "^1.0.3",
     "simple-statistics": "^2.5.0"
   }
 }

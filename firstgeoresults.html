@@ -17,9 +17,9 @@
 <div class="filtered_map_wrapper">
 	<div id="map" class="filtered"></div>
 	<div id="filterpanel">
-		<input type="checkbox" onclick="switchRoutes(this.checked)" checked/>Показати шляхи<br/>
-		<input type="checkbox" onclick="switchHomePlaces(this.checked)" checked/>Показати проживання<br/>
-		<input type="checkbox" onclick="switchWorkingPlaces(this.checked)" checked/>Показати місця роботи<br/>
+		<input type="checkbox" onclick="switchRoutes(this.checked)"/>Показати шляхи<br/>
+		<input type="checkbox" onclick="switchHomePlaces(this.checked)" checked/>Показати проживання&nbsp;&nbsp;&nbsp;<div class="home-label inline"></div><br/>
+		<input type="checkbox" onclick="switchWorkingPlaces(this.checked)" checked/>Показати місця роботи&nbsp;&nbsp;&nbsp;<div class="work-label inline"></div><br/>
 		<hr/>
 		<form name="filters">
 			<label>Фільтрувати за розташуваням</label><br/>
@@ -45,6 +45,7 @@
 			</select>
 		</form>
 		<button class="cityBtn clearfilters_btn" onclick="clearFilters()">Скинути фільтри</button>
+		<div id="percentsResult"></div>
 	</div>
 </div>
 	<!--<script src="Control.Coordinates.js"></script>-->
@@ -52,7 +53,7 @@
 	<script>
 		var zoom = 10;
 		var mapConfig = {
-			center: [50.44, 30.52],
+			center: [50.36, 30.52],
 			scrollWheelZoom: true,//false,
 			zoom: zoom
 		};

@@ -79,7 +79,8 @@ var cityBondaries = {
 	irpin: [[50.5799, 30.0785], [50.5036, 30.2852]],
 };
 var mainData = filteredData = [], selection, selectionField;
-var showRoutes = showWorkingPlaces = showHomePlaces= true;
+var showWorkingPlaces = showHomePlaces= true;
+var showRoutes = false;
 var homeMarkersLayer = L.layerGroup();
 var workMarkersLayer = L.layerGroup();
 var routesLayer = L.layerGroup();
@@ -93,6 +94,8 @@ var jobHighlightElem = highlightform.elements.jobhighlight;
 var evaluationSelector = d3.select("#evaluationSelector");
 var jobHiglightSelector = d3.select("#jobhighlightSelector");
 var jobFilterSelector = d3.select("#filterByJob");
+var percentsResult = d3.select("#percentsResult");
+var percents = 100;
 
 
 evaluationColumns.forEach(function(i) {
@@ -143,7 +146,7 @@ function draw(field) {
 		if (d.geohome && d.geowork && showRoutes) {
 			var polylineOptions = {
 				lineCap: 'round',
-				color: '#999',
+				color: '#888',
 				//dashArray: "10, 2",
 				weight: 1,
 				opacity: 0.4
@@ -151,32 +154,31 @@ function draw(field) {
 			var polyline = L.polyline([d.geohome, d.geowork], polylineOptions);
 			routesLayer.addLayer(polyline);
 		}
-
+		var grade = getGrade(d, field);
+		d.highlighted = grade > 0;
 		/**Draw Work Markers */
 		if (d.geowork && showWorkingPlaces) {
-			var iconWork = L.divIcon({className: 'work-label'});
+			var iconWork = L.divIcon({className: `work-label workgrade_${grade}`});
 			var workMark = L.marker(d.geowork, {icon: iconWork, riseOnHover: true});
 			workMarkersLayer.addLayer(workMark);
 		}
 
 		/**Draw home Markers */
 		if (d.geohome && showHomePlaces ) {
-			var grade = getGrade(d, field);
 			var iconHome = L.divIcon({className: `home-label grade_${grade}`});
 			var homeMark = L.marker(d.geohome, {icon: iconHome, riseOnHover: true, zIndexOffset: 5 + grade});
 			//workMark.bindTooltip(d);
-			homeMark.bindTooltip(getHomeTooltipContent(d), {className: 'home-tooltip'});
+			//homeMark.bindTooltip(getHomeTooltipContent(d), {className: 'home-tooltip'});
 			homeMarkersLayer.addLayer(homeMark);
 		}
 	});
-
 	map.addLayer(homeMarkersLayer);
 	map.addLayer(workMarkersLayer);
 	map.addLayer(routesLayer);
 
 }
 function getGrade(d, field) {
-	return field === 'eval' ? d[selection]: d.job === selection ? 2 : -2 ;
+	return !field ? 0 : field === 'eval' ? evaluationGradesMapper[d[selection]]: d.job === selection ? 2 : -2 ;
 }
 function splitCoord(string) {
 	if (!string) return null;
@@ -195,9 +197,10 @@ function isInBorders(borders, coords) {
 function row(d) {
 	if (d.geohome) d.geohome = d.geohome.split(',');
 	if (d.geowork) d.geowork = d.geowork.split(',');
-	if (d.geohome && d.geowork) {
-		d.distance = Math.round(L.latLng(d.geohome).distanceTo(d.geowork)/1000);
-	}
+	// if (d.geohome && d.geowork) {
+	// 	d.distance = Math.round(L.latLng(d.geohome).distanceTo(d.geowork)/1000);
+	// }
+	d.isSuburb = d.isSuburb === "true";
 	return d;
 }
 
@@ -234,6 +237,9 @@ function switchSelection(field){
 	selection = value;
 	clearAll();
 	draw(field);
+	var highlighted = filteredData.filter(d=>d.highlighted);
+	percents = Math.floor(highlighted.length*100/filteredData.length);
+	percentsResult.html(`</div><div class='legend-label grade_2'></div>Так ${percents}%<div class='legend-label grade_-2'></div>Ні ${100-percents}%`);
 }
 function switchFilter(){
 	var locationValue = locationElem.value,
@@ -245,6 +251,8 @@ function switchFilter(){
 	});
 	clearAll();
 	draw(selectionField);
+	percents = Math.floor(filteredData.length*100/mainData.length);
+	percentsResult.text('Обрано: ' + Math.floor(percents)+'%');
 }
 
 function switchRoutes(value){
@@ -253,7 +261,7 @@ function switchRoutes(value){
 		routesLayer.clearLayers();
 	} else {
 		clearAll();
-		draw();
+		draw(selectionField);
 	}
 }
 function switchWorkingPlaces(value){
@@ -262,7 +270,7 @@ function switchWorkingPlaces(value){
 		workMarkersLayer.clearLayers();
 	} else {
 		clearAll();
-		draw();
+		draw(selectionField);
 	}
 }
 function switchHomePlaces(value){
@@ -271,7 +279,7 @@ function switchHomePlaces(value){
 		homeMarkersLayer.clearLayers();;
 	} else {
 		clearAll();
-		draw();
+		draw(selectionField);
 	}
 }
 function clearFilters() {
@@ -280,4 +288,5 @@ function clearFilters() {
 	locationElem.value = jobElem.value = evalElem.value = '';
 	clearAll();
 	draw();
+	percentsResult.text('');
 }
