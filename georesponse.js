@@ -79,8 +79,8 @@ var cityBondaries = {
 	irpin: [[50.5799, 30.0785], [50.5036, 30.2852]],
 };
 var mainData = filteredData = [], selection, selectionField;
-var showWorkingPlaces = showHomePlaces= true;
-var showRoutes = false;
+var showHomePlaces= true;
+var showWorkingPlaces = showRoutes = false;
 var homeMarkersLayer = L.layerGroup();
 var workMarkersLayer = L.layerGroup();
 var routesLayer = L.layerGroup();
@@ -145,7 +145,6 @@ function draw(field) {
 		/**Draw Routes */
 		if (d.geohome && d.geowork && showRoutes) {
 			var polylineOptions = {
-				lineCap: 'round',
 				color: '#888',
 				//dashArray: "10, 2",
 				weight: 1,
