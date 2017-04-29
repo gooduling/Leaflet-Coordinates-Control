@@ -121,3 +121,7 @@ var colorScale = ['#ff00c8','#c000ff', '#1b00ff', '#0043ff', '#0095ff'];
 .inline {
 	display: inline-block;
 }
+#filterpanel h4 {
+	margin: 2px;
+	text-align: center;
+}

@@ -76,8 +76,8 @@ var jobList = ['Software Developer','Project/Account Manager','BA/QA','Інша 
 var regionBoundaries = {
     kyiv:[[51.0068, 29.5313], [49.6321, 32.0691]],
     lviv:[[50.0906, 23.4476], [49.4288, 24.6396]],
-    kharkiv: [[50.0545, 36.1285], [49.9030, 36.3833]],
-    dnipro: [[48.5825, 34.8425],[48.3275, 35.3657]],
+    kharkiv: [[50.330019, 35.358166], [49.075414, 37.480492]],
+    dnipro: [[48.941709, 33.916253],[48.078126, 36.313166]],
     odesa: [[46.5541, 30.6409], [46.3332, 30.7864]]
 };
 var cityBondaries = {
@@ -85,6 +85,8 @@ var cityBondaries = {
     kyiv: [[50.5298, 30.3889], [50.3770, 30.6992]],
     kyiv2:[[50.471923, 30.355972],[50.425589, 30.412676]],
     irpin: [[50.5799, 30.0785], [50.5036, 30.2852]],
+    kharkiv:[[50.066398, 36.156962], [49.912435, 36.434025]],
+    dnipro: [[48.551150, 34.789949], [48.399362, 35.169727]]
 };
 var emptyPerson = {
     name: "",
@@ -217,7 +219,7 @@ function splitCoord(string) {
     if (!splitted[1]) splitted = string.split(", ");
     if (!splitted[1]) splitted = string.split(",");
     var isValid = splitted.length === 2 && !isNaN(splitted[1]) && !isNaN(splitted[0]);
-    return isValid ? splitted : null;
+    return isValid ? splitted : '';
 }
 function isInBorders(borders, coords) {
     var isCity = +coords[0] < borders[0][0] && +coords[0] > borders[1][0]
@@ -226,12 +228,12 @@ function isInBorders(borders, coords) {
 }
 
 function rowTransformer(d) {
-    // evaluationColumns.forEach(function(item) {
-    //     d[item] = evaluationGradesMapper[d[item]] || -10;
-    // });
-    // townGradesColumns.forEach(function(item) {
-    //     d[item] = townGradesMapper[d[item]] || -10;
-    // });
+    evaluationColumns.forEach(function(item) {
+        d[item] = evaluationGradesMapper[d[item]] || -10;
+    });
+    townGradesColumns.forEach(function(item) {
+        d[item] = townGradesMapper[d[item]] || -10;
+    });
     d.geohome = splitCoord(d.geohome);
     d.geowork = splitCoord(d.geowork);
     if (d.geowork) {
@@ -240,25 +242,31 @@ function rowTransformer(d) {
     }
 
     if(d.geohome) {
-        d.homeLong = d.geohome[1];
-        d.homeLat = d.geohome[0];
+       d.homeLong = d.geohome[1];
+       d.homeLat = d.geohome[0];
         for (var region in regionBoundaries) {
             if (isInBorders(regionBoundaries[region], d.geohome)) d.region = region;
         }
         for (var city in cityBondaries) {
             if (isInBorders(cityBondaries[city], d.geohome)) d.city = city;
         }
-        var isSuburb = ((d.region == 'kyiv' || d.region == 'lviv') && !(d.city && d.city != 'irpin'));
-        d.isSuburb = isSuburb;
+        var isSuburb = ((d.region == 'kyiv' || d.region == 'dnipro' || d.region == 'lviv' || d.region == 'kharkiv') && !(d.city && d.city != 'irpin'));
+        d.isSuburb = isSuburb ? 1:0;
+        d.city = '';
     };
     if (d.geohome && d.geowork) {
         var distance = geolib.getDistance(
-            {latitude: d.homeLat, longitude: d.homeLong},
-            {latitude: d.workLat, longitude: d.workLong}
+            {latitude:  d.geohome[0], longitude:  d.geohome[1]},
+            {latitude:  d.geowork[0], longitude:  d.geowork[1]}
         );
         d.distance = Math.round(distance/100)/10;
+        if (d.distance > 100) {
+            d.workLat = d.workLong = d.distance = '';
+        }
     }
-    
+    if (d.job) d.job = jobList.indexOf(d.job);
+    d.geohome = '';
+    d.geowork = '';
     //d.liveHouse = evaluationGradesMapper[d.liveHouse];
     //d.liveSuburb = evaluationGradesMapper[d.liveHouse];
     //d.age = +d.age;
@@ -267,4 +275,3 @@ function rowTransformer(d) {
     //delete d.comments;
     return d;
 }
-//data.filter(d=>!(d.distance && d.distance > 150 || d.job ==='Спеціальність не пов\'язана з ІТ'));
