@@ -89,7 +89,7 @@ var colorScale = ['#ff00c8','#c000ff', '#1b00ff', '#0043ff', '#0095ff'];
 	background: rgba(255,255,255,0.85);
 	position: absolute;
 	z-index: 9000;
-	right: 12px;
+	right: 7px;
 	top: 40px;
 }
 #map.filtered {
