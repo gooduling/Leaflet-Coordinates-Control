@@ -70,8 +70,8 @@
 
 		var c = new L.Control.Coordinates();
 		c.addTo(map);
-	//	map.on('focus', function() { map.scrollWheelZoom.enable(); });
-	//	map.on('blur', function() { map.scrollWheelZoom.disable(); });
+		map.on('focus', function() { map.scrollWheelZoom.enable(); });
+		map.on('blur', function() { map.scrollWheelZoom.disable(); });
 		//map.on('click', function(e) {c.setCoordinates(e)});
 		//map.on('mousemove', function(e) {c.bindCircle(e);	});
 	</script>
