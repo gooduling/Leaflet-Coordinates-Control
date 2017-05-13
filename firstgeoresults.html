@@ -58,6 +58,7 @@
 			zoom: zoom
 		};
 		var map = L.map('map', mapConfig);
+		map.scrollWheelZoom.disable();
 		var tiles = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png';
 		//var tiles = 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
 		//var tiles = 'http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
