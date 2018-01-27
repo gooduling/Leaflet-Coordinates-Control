@@ -1,18 +1,8 @@
-Leaflet Coordinates Control
+Leaflet Coordinates Picker
 ===========================
-Captures mouseclick and displays its coordinates with easy way to copy them.
+Leaflet widget to pick user's geolocation
 
 Demo
 ----
 
-See demo [here](http://zimmicz.github.io/Leaflet-Coordinates-Control/).
-
-How to use
-----------
-	var c = new L.Control.Coordinates(); # you can send options to the constructor if you want to, otherwise default values are used
-
-	c.addTo(map);
-
-	map.on('click', function(e) {
-		c.setCoordinates(e);
-	});
+See demo https://gooduling.github.io/Leaflet-Geopicker/maponly.html
